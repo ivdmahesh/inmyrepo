@@ -6,12 +6,22 @@ from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 import datetime
 from bson import ObjectId
+import os
+from dotenv import load_dotenv
 
 
 class functions(): 
     def __init__(self):
-        self.client = MongoClient('mongodb+srv://ivdmahesh:suDQZhpKAwtLALu1@cluster0.7sc7y.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
-        self.access_token = '8062158294:AAH0UiWJQO0xWTEMi_PXZqxoV-tgJ7GmxDk'
+        load_dotenv()
+        prod = True
+        if(prod):
+            mongodbclienturl = os.environ['mongodbclienturl']
+            accesstoken = os.environ['accesstoken']
+        else:
+            mongodbclienturl = os.getenv("mongodbclienturl")
+            accesstoken = os.getenv("accesstoken")
+        self.client = MongoClient(mongodbclienturl)
+        self.access_token = accesstoken
         self.bot = Bot(token=self.access_token, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
     
     def PhoneIsValid(self,phone):

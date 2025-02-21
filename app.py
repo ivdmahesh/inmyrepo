@@ -12,13 +12,15 @@ import random
 from functions import functions
 
 from pydantic import BaseModel
+from dotenv import load_dotenv
+import datetime, math, os
 
-import datetime, math
-
+load_dotenv()
 app = FastAPI()
 
 origins = [
-    "http://localhost:3000"
+    "http://localhost:3000",
+    "https://www.inmycolony.com"
 ]
 
 app.add_middleware(
@@ -26,6 +28,15 @@ app.add_middleware(
     allow_origins=origins,
     allow_methods=["*"]
 )
+
+prod = True
+
+if(prod):
+    openaiapikey = os.environ['openaiapikey']
+else:
+    openaiapikey = os.getenv("openaiapikey")
+
+
 
 f = functions()
 class Message(BaseModel):
@@ -177,7 +188,7 @@ async def FetchEvents(user: int, page: int):
 model = ChatOpenAI(
 
     model_name="gpt-3.5-turbo",
-    openai_api_key="sk-proj-QuEhwSwuMWRXOF0687wOT3BlbkFJBDMcMVZ47ZGH3IFICU55",
+    openai_api_key=openaiapikey,
     temperature=0
 )
 
